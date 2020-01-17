@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>JS表达式运算</title>
+</head>
+<body>
+  <h1>请使用Chrome并按F12进行调试和测试</h1>
+  <pre>
+    var context = new CalContext();
+    //增加值栈——变量
+    context.putData("$a",5);
+    //增加值栈——变量
+    context.putData("PI",3);
+    //增加值栈——无参数函数
+    context.putData("fun0",function(){ return 1000;});
+    //增加值栈——单参数函数
+    context.putData("fun1",function(a){ return 10 * a;});
+    //增加值栈——多参数函数
+    context.putData("fun2",function(a,b){ return 10 * a + b;});
+    //增加值栈——对象参数函数
+    var t = {
+      year: 28,
+      fun: function(a) {
+        return a + this.year;
+      }
+    };
+    context.putData("fun3",t.fun,t);
+    //增加值栈——对象
+    context.putData("people",{
+       age: 28,
+       bat: 3,
+       fun1: function(){
+         return this.age + 2;
+       },
+       fun2: function(a){
+         return this.age + 10 * a;
+       },
+       fun3: function(a,b){
+         return this.age + 10 * a + b;
+       },
+       skill: {
+          lang : function(a){
+              return a + this.bat;
+          }
+       }
+    });
+
+    //获取值
+    //var result = context.calc(expr);
+
+    //下面是测试用例
+
+    context.assertEqual("40+8*2",56);
+
+    context.assertEqual("40*8+2",322);
+
+    context.assertEqual("40/8+2",7);   
+
+    context.assertEqual("40+8/2",44);
+
+    context.assertEqual("(40+8)/2",24);
+
+    context.assertEqual("40*(8-2)",240);
+
+    context.assertEqual("10%3 + 1",2);
+
+    context.assertEqual("0.1 + 1 + 0.3",1.4);
+
+    context.assertEqual("0.1 *10 + 6.3",7.3);
+
+    context.assertEqual("$a + 5",10);  
+
+    context.assertEqual("($a + 1)/2 + 1",4);
+
+    context.assertEqual("$a + fun0()",1005);
+
+    context.assertEqual("$a + fun0() + 100",1105);
+
+    context.assertEqual("$a + fun1(1)",15);
+
+    context.assertEqual("$a + fun2(2,1)",26);
+
+    context.assertEqual("$a + fun2(3+7,3)",108);
+
+    context.assertEqual("$a + fun2(fun1(2),3) + 20",228);
+
+    context.assertEqual("$a + fun3(2)",35);
+
+    context.assertEqual("11 + people.age / 2 + 6",31);
+
+    context.assertEqual("11 + people.age / 2 + fun1(1)",35);
+
+    context.assertEqual("11 + fun1(people.age / 2)/2 + 1",82);
+
+    context.assertEqual("$a + fun3(2) + people.fun1(1)",65);    
+
+    context.assertEqual("$a + fun3(2) + people.skill.lang(1)",39);
+
+    //10 + (28+2) + 106 * 2 + 24 = 276
+    context.assertEqual("10 + fun3(2) + people.skill.lang(fun2(3+7,3)) * 2 + 24",276);
+
+    context.assertEqual("PI * 2 + 3",9);
+
+  </pre>
+<script type="text/javascript" src="expression.js"></script>
+<script>
+    var context = new CalContext();
+    //增加值栈——变量
+    context.putData("$a",5);
+    //增加值栈——变量
+    context.putData("PI",3);
+    //增加值栈——无参数函数
+    context.putData("fun0",function(){ return 1000;});
+    //增加值栈——单参数函数
+    context.putData("fun1",function(a){ return 10 * a;});
+    //增加值栈——多参数函数
+    context.putData("fun2",function(a,b){ return 10 * a + b;});
+    //增加值栈——对象参数函数
+    var t = {
+      year: 28,
+      fun: function(a) {        
+        return a + this.year;
+      }
+    };
+    context.putData("fun3",t.fun,t);
+    //增加值栈——对象
+    context.putData("people",{
+       age: 28,
+       bat: 3,
+       fun1: function(){
+         return this.age + 2;
+       },
+       fun2: function(a){
+         return this.age + 10 * a;
+       },
+       fun3: function(a,b){
+         return this.age + 10 * a + b;
+       },
+       skill: {
+          lang : function(a){
+              return a + this.bat;
+          }
+       }
+    });
+
+    context.assertEqual("40+8*2",56);
+
+    context.assertEqual("40*8+2",322);
+
+    context.assertEqual("40/8+2",7);
+
+    context.assertEqual("40+8/2",44);
+
+    context.assertEqual("(40+8)/2",24);
+
+    context.assertEqual("40*(8-2)",240);
+
+    context.assertEqual("10%3 + 1",2);
+
+    context.assertEqual("0.1 + 1 + 0.3",1.4);
+
+    context.assertEqual("0.1 *10 + 6.3",7.3);
+
+    context.assertEqual("$a + 5",10);
+
+    context.assertEqual("($a + 1)/2 + 1",4);
+
+    context.assertEqual("$a + fun0()",1005);
+
+    context.assertEqual("$a + fun0() + 100",1105);
+
+    context.assertEqual("$a + fun1(1)",15);
+
+    context.assertEqual("$a + fun2(2,1)",26);
+
+    context.assertEqual("$a + fun2(3+7,3)",108);
+
+    context.assertEqual("$a + fun2(fun1(2),3) + 20",228);
+
+    context.assertEqual("$a + fun3(2)",35);
+
+    context.assertEqual("11 + people.age / 2 + 6",31);
+
+    context.assertEqual("11 + people.age / 2 + fun1(1)",35);
+
+    context.assertEqual("11 + fun1(people.age / 2)/2 + 1",82);
+
+    context.assertEqual("$a + fun3(2) + people.fun1(1)",65);
+
+    context.assertEqual("$a + fun3(2) + people.skill.lang(1)",39);
+    //10 + (28+2) + 106 * 2 + 24 = 276
+    context.assertEqual("10 + fun3(2) + people.skill.lang(fun2(3+7,3)) * 2 + 24",276);
+
+    context.assertEqual("PI * 2 + 3",9);
+</script>
+</body>
+</html>
